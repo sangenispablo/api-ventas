@@ -32,7 +32,7 @@ export default function isAuthenticated(
     // este middleware le agrega ese dato al request.
     request.user = {
       id: sub,
-    }
+    };
     return next();
   } catch (error) {
     throw new AppError('Invalid JWT Token.');

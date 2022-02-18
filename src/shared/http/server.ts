@@ -10,12 +10,15 @@ import routes from './routes';
 // Esta importacion ejecuta createConnection de typeorm segun el archivo ormconfig.json
 import AppError from '@shared/errors/AppError';
 import '@shared/typeorm';
+import uploadConfig from '@config/upload';
 
 const app = express();
 
 // middleware de terceros
 app.use(cors());
 app.use(express.json());
+// Esto es para servir archivos estaticos
+app.use('/files', express.static(uploadConfig.directory));
 
 // routes
 app.use(routes);
