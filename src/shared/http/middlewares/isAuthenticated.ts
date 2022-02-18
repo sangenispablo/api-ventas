@@ -4,6 +4,12 @@ import { verify } from 'jsonwebtoken';
 import AppError from '@shared/errors/AppError';
 import authConfig from '@config/auth';
 
+interface ITokenPayLoad {
+  iat: number;
+  exp: number;
+  sub: string;
+}
+
 export default function isAuthenticated(
   request: Request,
   response: Response,
@@ -19,9 +25,14 @@ export default function isAuthenticated(
   // de la siguiente forma, la primera parte no la quiero por eso desestructuro asi
   const [, token] = authHeader.split(' ');
   try {
-    // const decodeToken = verify(token, authConfig.jwt.secret);
-    // console.log(decodeToken);
-    verify(token, authConfig.jwt.secret);
+    const decodedToken = verify(token, authConfig.jwt.secret);
+    const { sub } = decodedToken as ITokenPayLoad;
+    // sobreescribiendo el request de express podemos agregar el id del usuario
+    // para que next tenga a mano el id del mismo y saber quien es el que hacer la solicitud con solamente el token
+    // este middleware le agrega ese dato al request.
+    request.user = {
+      id: sub,
+    }
     return next();
   } catch (error) {
     throw new AppError('Invalid JWT Token.');
