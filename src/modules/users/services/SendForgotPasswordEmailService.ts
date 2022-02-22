@@ -20,9 +20,8 @@ class SendForgotPasswordEmailService {
       throw new AppError('Email User does not exists.');
     }
 
-    const token = await userTokenRepository.generate(user.id);
-
-    console.log(token);
+    // Creo el token para enviar a al usuario
+    await userTokenRepository.generate(user.id);
   }
 }
 
