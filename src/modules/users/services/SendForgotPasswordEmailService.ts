@@ -3,6 +3,7 @@ import { getCustomRepository } from 'typeorm';
 
 import { UsersRepository } from '../typeorm/repositories/UsersRepository';
 import { UserTokensRepository } from '../typeorm/repositories/UserTokensRepository';
+import EtherealMail from '@config/mail/EtherealMail';
 
 interface IRequest {
   email: string;
@@ -21,7 +22,16 @@ class SendForgotPasswordEmailService {
     }
 
     // Creo el token para enviar a al usuario
-    await userTokenRepository.generate(user.id);
+    const token = await userTokenRepository.generate(user.id);
+
+    // eslint-disable-next-line no-console
+    //console.log(token);
+
+    // aca coloco configuracion de EtherealMail
+    await EtherealMail.sendMail({
+      to: email,
+      body: `Solicitud de redefinir contraseña, su token es: ${token?.token}`,
+    });
   }
 }
 
