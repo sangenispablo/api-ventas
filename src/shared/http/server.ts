@@ -6,6 +6,9 @@ import express, { NextFunction, Request, Response } from 'express';
 import routes from '@shared/http/routes';
 import AppError from '@shared/errors/AppError';
 
+// llamo al metodo createConnection de typeORM
+import "@shared/typeorm";
+
 const app = express();
 
 app.use(cors());
