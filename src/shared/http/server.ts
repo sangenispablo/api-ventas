@@ -1,13 +1,15 @@
-import "reflect-metadata";
+import 'reflect-metadata';
+import 'express-async-errors';
 
-import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
+import { errors } from 'celebrate';
+import cors from 'cors';
 
 import routes from '@shared/http/routes';
 import AppError from '@shared/errors/AppError';
 
-// llamo al metodo createConnection de typeORM
-import "@shared/typeorm";
+// llamo al metodo createConnection de typeORM para establecer la conexion
+import '@shared/typeorm';
 
 const app = express();
 
@@ -16,6 +18,9 @@ app.use(express.json());
 
 // rutas de los endpoints
 app.use(routes);
+
+// middleware de celebrate para la validacion de los datos
+app.use(errors());
 
 // middleware para procesar los errores de forma generica
 app.use(

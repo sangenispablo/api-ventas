@@ -11,7 +11,7 @@ interface IRequest {
 class ShowProductsService {
   public async execute({ id }: IRequest): Promise<Product | undefined> {
     const productRepository = getCustomRepository(ProductRepository);
-    const product = productRepository.findOne(id);
+    const product = await productRepository.findOne(id);
     if (!product) {
       throw new AppError('Product not Found')
     }
